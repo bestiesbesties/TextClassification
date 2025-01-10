@@ -3,7 +3,7 @@ import numpy as np
 from cvmatching import summarize, embed, tokenize
 
 def state_document(tokenizer_model, embedding_model, text) -> np.array:
-    summ = summarize.summarize_MiniLM(text, 20)
+    summ = summarize.summarize_MiniLM(text, 1)
     tokens = tokenize.tokenize(tokenizer_model=tokenizer_model, document=summ)
     embeddings = embed.embed(embedding_model=embedding_model, tokens=tokens)
 
