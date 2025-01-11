@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Matching</title>
+    <link rel="stylesheet" href="app/public/home.css">
+
+</head>
+
+<body>
+    <script src="/app/public/scripts/drop.js" defer></script>
+    <img src="/app/public/images/logo.png" alt="Logo">
+    <div id="dropzone">Upload hier je JD</div>
+
+    <div class="content">
+        <button id="resetButton">reset data</button>
+    </div>
+
+    <script>
+        document.getElementById("resetButton").addEventListener("click", async () => {
+            const response = await fetch("/reset-db", {method:"POST"});
+            console.log(response)
+        })
+        </script>
+        
+
+</body>
+</html>

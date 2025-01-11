@@ -15,7 +15,6 @@ with open("config.json", "r") as file:
 bert_tokenizer = BertTokenizer.from_pretrained(config["model_name"])
 bert_model = BertModel.from_pretrained(config["model_name"])
 
-
 jd = text.parse_pdf(config["jd"])
 cv = text.parse_pdf(config["cv"])
 
