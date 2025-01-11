@@ -12,3 +12,4 @@ notes.txt
 models/*
 ## neem map zelf mee
 !models/
+/node_modules
