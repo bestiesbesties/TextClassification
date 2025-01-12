@@ -1,27 +1,33 @@
 body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0; 
     font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-    background-color: black;
-    width: 700px;
+    background-color: white;
     margin: 0 auto;
     transform: scale(0.8);
     transform-origin: top;
-    }
-
-img {
-    max-width: 100%;
 }
 
-.content {
-    margin-top: 10px;
+.front {
+    width: 700px;
+    padding: 20px;
+    background-color: #d1d1d1;
+}
+.text-holder{
+    margin-top: 20px;
+}
+
+.center-text {
+    text-align: center;
 }
 
 button {
     background-color: #e7e7e7;
     color : black;
     border: none;
-    padding: 15px 32px;
+    padding: 40px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -35,10 +41,8 @@ button:hover {
 }
 
 #dropzone {
-    position: relative;
-    z-index: 1;
-    width: 300px;
-    height: 200px;
+    width: 350px;
+    height: 250px;
     border: 2px dashed #aaa;
     border-radius: 10px;
     display: flex;
@@ -53,4 +57,34 @@ button:hover {
 #dropzone.dragover {
     border-color: #333;
     background-color: #f0f0f0;
+}
+
+.settings {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    align-items: center;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sector-row {
+    display: flex; /* This will make the child elements align horizontally */
+    justify-content: space-around; /* Distributes items evenly with some space between them */
+    padding: 10px 10;
+}
+.sector-type {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+}
+
+.sector-image {
+    width: 140px;
+    height: 140px;
 }

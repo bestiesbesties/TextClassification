@@ -10,11 +10,57 @@
 
 <body>
     <script src="/app/public/scripts/drop.js" defer></script>
-    <img src="/app/public/images/logo.png" alt="Logo">
-    <div id="dropzone">Upload hier je JD</div>
 
-    <div class="content">
-        <button id="resetButton">reset data</button>
+    
+
+    <div class="front">
+        <div class = "text-holder"> 
+            <h6 class="center-text text-1">Test your skills</h6>
+            <h2 class="center-text text-2">AI Job Sector Matcher</h2>
+            <p class="center-text text-3" >Drag & drop any CV onto the page, and wait for the results.</p>
+        </div>
+
+        <div class="settings">
+            <div class="button-container">
+                <button id="resetButton">reset data</button>
+                <button id="resetButton">calculate data</button>
+            </div>
+        
+            <div id="dropzone">Drop pdf here</div>
+        </div>
+
+        <div class="sectors">
+
+            <div class="sector-row">
+                <div class="sector-type">
+                    <img class= "sector-image" src="/app//public/images/coins.png"></img>
+                    <h6 class="center-text text-1">Economy</h6>
+                    <p>20%</p>
+                </div>
+
+                <div class="sector-type">
+                    <img class= "sector-image" src="/app//public/images/health.png"></img>
+                    <h6 class="center-text text-1">Health</h6>
+                    <p>20%</p>
+                </div>
+
+                <div class="sector-type">
+                    <img class= "sector-image" src="/app//public/images/tech.png"></img>
+                    <h6 class="center-text text-1">Tech</h6>
+                    <p>20%</p>
+                </div>
+
+                <div class="sector-type">
+                    <img class= "sector-image" src="/app//public/images/agriculture.png"></img>
+                    <h6 class="center-text text-1">Agriculture</h6>
+                    <p>20%</p>
+                </div>
+
+            </div>
+
+        </div>
+
+
     </div>
 
     <script>
@@ -22,8 +68,7 @@
             const response = await fetch("/reset-db", {method:"POST"});
             console.log(response)
         })
-        </script>
+    </script>
         
-
 </body>
 </html>

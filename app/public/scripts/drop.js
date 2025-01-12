@@ -3,7 +3,6 @@
 // new maakt een nieuwe instance, ipv een constructor functie als functie aan te roepen
 
 const dropzone = document.getElementById("dropzone");
-console.log("hello world");
 
 dropzone.addEventListener("dragover", (event) => {
     event.preventDefault();
@@ -20,24 +19,26 @@ dropzone.addEventListener("dragenter", (event) => {
 });
 
 dropzone.addEventListener("drop", (event) => {
+    console.log("Handeling drop event")
     event.preventDefault(); // voorkomt dat de browser het bestand opent ipv opslaat.
     dropzone.classList.remove("dragover");
+
+    console.log("Handeling drop event")
     const files = event.dataTransfer.files;
-    console.log(files);
     const formData = new FormData();
+    formData.append("files", files[0]);
 
-    for (let file of files) {
-        formData.append("files", file);
-    }
-
-    fetch("/upload", {
+    console.log("Posting to server")
+    fetch("/upload_run", {
         method: "POST",
         body: formData
     }).then(response => {
         if (response.ok) {
+            console.log("Bestand succesvol verstuurd naar de server");
             alert("Bestand succesvol verstuurd naar de server");
         } else {
-            alert("Bestand onsuccesvol verstuurd naar de server");
+            console.log("Bestand onsuccesvol verstuurd naar de server");
+            alert("Bestand succesvol verstuurd naar de server");
         }
     }).catch((error) => {
         console.error("Fout: ", error);
