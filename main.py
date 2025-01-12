@@ -1,13 +1,18 @@
-import os
 import logging
-import numpy as np
-import json
-import pandas as pd 
-from transformers import BertTokenizer, BertModel
-from sklearn.metrics.pairwise import cosine_similarity
+import argparse
 from importlib import reload
+import json
+from transformers import BertTokenizer, BertModel
 
 from cvmatching import helpers, text
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "filepath", 
+    type=str, 
+    help="The rich words document to process and save embeddings for."
+)
+namespace = parser.parse_args()
 
 with open("config.json", "r") as file:
     config = json.load(file)["config"]
@@ -15,11 +20,8 @@ with open("config.json", "r") as file:
 bert_tokenizer = BertTokenizer.from_pretrained(config["model_name"])
 bert_model = BertModel.from_pretrained(config["model_name"])
 
-jd = text.parse_pdf(config["jd"])
-cv = text.parse_pdf(config["cv"])
+pdf_text = text.parse_pdf(namespace.filepath)
 
-jd_embedding = helpers.state_document(bert_tokenizer, bert_model, jd)
-cv_embedding = helpers.state_document(bert_tokenizer, bert_model, cv)
+pdf_embedding = helpers.state_document(bert_tokenizer, bert_model, pdf_text)
 
-similarity = cosine_similarity([jd_embedding], [cv_embedding])
-print("similarity", similarity[0][0])
+print(pdf_embedding)

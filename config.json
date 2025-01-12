@@ -1,7 +1,5 @@
 {
     "config" : {
-        "model_name" : "bert-base-uncased",
-        "jd" : "files/jd.pdf",
-        "cv" : "files/cv1.pdf"
+        "model_name" : "bert-base-uncased"
     }
 }

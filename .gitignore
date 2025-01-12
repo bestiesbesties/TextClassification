@@ -13,3 +13,4 @@ models/*
 ## neem map zelf mee
 !models/
 /node_modules
+test.js
