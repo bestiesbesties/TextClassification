@@ -40,4 +40,4 @@ for sector in config["sectors"]:
     score = 0.6 * cosine_similarity + 0.4 * (keyword_overlap / (len(sector_keywords) / 3)) ## / 3 weghalen als lemmitization
     scores[sector] = round(score,2)
 
-print(scores)
+print(json.dumps(scores))

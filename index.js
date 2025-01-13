@@ -4,6 +4,7 @@ const child_process = require("child_process");
 
 const express = require("express"); // voor routing
 const multer = require("multer"); // voor storage
+const { stdout } = require("process");
 
 
 
@@ -40,12 +41,21 @@ app.post("/upload_run", upload.array("files"), (request, response) => {
 
     console.log("Executing procces on file: uploadedFilepath" )
     const python = child_process.exec("python3 main.py '" + uploadedFilepath + "'", (error, stdout, stderr) => {
-        console.log("error: ", error)
+        if (error) {
+            console.log("error: ", error)
+            return response.status(500)
+        }
+        if (stderr) {
+            console.log("stderr: ", stderr)
+            return response.status(500)
+        }
+        
         console.log("stdout: ", stdout)
-        console.log("stderr: ", stderr)
+        const cleanedJson = JSON.parse(stdout.trim())
+        console.log("cleanedJson: ", cleanedJson)
+        
+        response.status(200).json(cleanedJson)
     });
-
-    response.status(200);
 });
 
 const PORT = 4500;

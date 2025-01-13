@@ -18,7 +18,7 @@ dropzone.addEventListener("dragenter", (event) => {
     event.preventDefault();
 });
 
-dropzone.addEventListener("drop", (event) => {
+dropzone.addEventListener("drop", async (event) => {
     console.log("Handeling drop event")
     event.preventDefault(); // voorkomt dat de browser het bestand opent ipv opslaat.
     dropzone.classList.remove("dragover");
@@ -27,20 +27,24 @@ dropzone.addEventListener("drop", (event) => {
     const files = event.dataTransfer.files;
     const formData = new FormData();
     formData.append("files", files[0]);
-
-    console.log("Posting to server")
-    fetch("/upload_run", {
-        method: "POST",
-        body: formData
-    }).then(response => {
+    alert("Bestand succesvol verstuurd naar de server");
+    try {
+        console.log("Posting to server")
+        const response = await fetch("/upload_run", {
+            method: "POST",
+            body: formData
+        });
+        
         if (response.ok) {
-            console.log("Bestand succesvol verstuurd naar de server");
-            alert("Bestand succesvol verstuurd naar de server");
+            const result = await response.json();
+            console.log("result: ", result);
+            document.getElementById("tech-value").innerText = result.tech + "%";
+            document.getElementById("agriculture-value").innerText = result.agriculture + "%";
         } else {
-            console.log("Bestand onsuccesvol verstuurd naar de server");
-            alert("Bestand succesvol verstuurd naar de server");
+            alert("Error on serverside");
         }
-    }).catch((error) => {
-        console.error("Fout: ", error);
-    });
-})
+
+    } catch (error) {
+        console.error("error: ", error);
+    }
+});
