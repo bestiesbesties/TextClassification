@@ -11,16 +11,16 @@ from cvmatching import calculate
 with open("config.json", "r") as file:
     config = json.load(file)["config"]
 
-# parser = argparse.ArgumentParser()
-# parser.add_argument(
-#     "filepath", 
-#     type=str, 
-#     help="The rich words document filepath to process and stdout the calculations for."
-# )
-# namespace = parser.parse_args()
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "filepath", 
+    type=str, 
+    help="The rich words document filepath to process and stdout the calculations for."
+)
+namespace = parser.parse_args()
 
 
-pdf_embedding, pdf_keywords = calculate.calculate_pdf("files/cv2.pdf")
+pdf_embedding, pdf_keywords = calculate.calculate_pdf(namespace.filepath)
 
 with open(os.path.join("app", "data", "preloads.json"), "r") as file:
     preloads = json.load(file)["preloads"]
@@ -38,6 +38,6 @@ for sector in config["sectors"]:
     
     # print(sector, "cosine_similarity: ", cosine_similarity, "keyword_score: ", keyword_overlap / (len(sector_keywords) / 2))
     score = 0.6 * cosine_similarity + 0.4 * (keyword_overlap / (len(sector_keywords) / 3)) ## / 3 weghalen als lemmitization
-    scores[sector] = round(score,2)
+    scores[sector] = str(round(score * 100, 0))
 
 print(json.dumps(scores))

@@ -8,9 +8,7 @@ notes.txt
 /venv
 *.pth
 /env
-## negeer alle inhoud
 models/*
-## neem map zelf mee
 !models/
 /node_modules
 test.js

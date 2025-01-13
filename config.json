@@ -1,5 +1,5 @@
 {
     "config" : {
-        "sectors" : ["tech", "agriculture"]
+        "sectors" : ["tech", "agriculture", "education", "retail", "health", "economy", "construction", "legal"]
     }
 }

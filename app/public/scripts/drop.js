@@ -38,8 +38,15 @@ dropzone.addEventListener("drop", async (event) => {
         if (response.ok) {
             const result = await response.json();
             console.log("result: ", result);
+            document.getElementById("economy-value").innerText = result.economy + "%";
+            document.getElementById("health-value").innerText = result.health + "%";
             document.getElementById("tech-value").innerText = result.tech + "%";
             document.getElementById("agriculture-value").innerText = result.agriculture + "%";
+
+            document.getElementById("construction-value").innerText = result.construction + "%";
+            document.getElementById("education-value").innerText = result.education + "%";
+            document.getElementById("legal-value").innerText = result.legal + "%";
+            document.getElementById("retail-value").innerText = result.retail + "%";
         } else {
             alert("Error on serverside");
         }

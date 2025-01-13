@@ -13,7 +13,7 @@ body {
 .front {
     width: 700px;
     padding: 20px;
-    background-color: #d1d1d1;
+    background-color: #e9ecef;
 }
 .text-holder{
     margin-top: 20px;
@@ -24,7 +24,7 @@ body {
 }
 
 button {
-    background-color: #e7e7e7;
+    background-color: #ced4da;
     color : black;
     border: none;
     padding: 40px 32px;
@@ -42,21 +42,20 @@ button:hover {
 
 #dropzone {
     width: 350px;
-    height: 250px;
+    height: 100%;
     border: 2px dashed #aaa;
-    border-radius: 10px;
+    border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 24px;
-    color: #3b12A3;
     margin: 20px auto;
-    background-color: red;
+    background-color: #dee2e6; 
 }
 
 #dropzone.dragover {
     border-color: #333;
-    background-color: #f0f0f0;
+    background-color: #bdbdbd;
 }
 
 .settings {
@@ -64,9 +63,16 @@ button:hover {
     grid-template-columns: 1fr auto;
     gap: 10px;
     align-items: center;
+    padding-bottom: 20px;
 }
 
 .button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.sectors {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -78,6 +84,7 @@ button:hover {
     padding: 10px 10;
 }
 .sector-type {
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -85,6 +92,7 @@ button:hover {
 }
 
 .sector-image {
-    width: 140px;
-    height: 140px;
+    border-radius: 15px;
+    width: 150px;
+    height: 150px;
 }
