@@ -3,8 +3,8 @@ import numpy as np
 from cvmatching import summarize, embed, tokenize
 
 def state_document(tokenizer_model, embedding_model, text) -> np.array:
-    summ = summarize.summarize_MiniLM(text, 1)
-    tokens = tokenize.tokenize(tokenizer_model=tokenizer_model, document=summ)
+    # summ = summarize.summarize_MiniLM(text, 1)
+    tokens = tokenize.tokenize(tokenizer_model=tokenizer_model, document=text)
     embeddings = embed.embed(embedding_model=embedding_model, tokens=tokens)
 
     ## Make 1 dimensional numpy from embedding_model output

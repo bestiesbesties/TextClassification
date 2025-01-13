@@ -39,7 +39,7 @@ app.post("/upload_run", upload.array("files"), (request, response) => {
     const uploadedFilepath = request.files[0].path
 
     console.log("Executing procces on file: uploadedFilepath" )
-    const python = child_process.exec("python3 main.py -fp '" + uploadedFilepath + "'", (error, stdout, stderr) => {
+    const python = child_process.exec("python3 main.py '" + uploadedFilepath + "'", (error, stdout, stderr) => {
         console.log("error: ", error)
         console.log("stdout: ", stdout)
         console.log("stderr: ", stderr)

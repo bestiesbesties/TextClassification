@@ -1,27 +1,43 @@
+import os
 import logging
 import argparse
 from importlib import reload
 import json
-from transformers import BertTokenizer, BertModel
 
-from cvmatching import helpers, text
+## TODO sentence transformers gebruiken
+from sentence_transformers import SentenceTransformer, util
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "filepath", 
-    type=str, 
-    help="The rich words document to process and save embeddings for."
-)
-namespace = parser.parse_args()
-
+from cvmatching import calculate
 with open("config.json", "r") as file:
     config = json.load(file)["config"]
 
-bert_tokenizer = BertTokenizer.from_pretrained(config["model_name"])
-bert_model = BertModel.from_pretrained(config["model_name"])
+# parser = argparse.ArgumentParser()
+# parser.add_argument(
+#     "filepath", 
+#     type=str, 
+#     help="The rich words document filepath to process and stdout the calculations for."
+# )
+# namespace = parser.parse_args()
 
-pdf_text = text.parse_pdf(namespace.filepath)
 
-pdf_embedding = helpers.state_document(bert_tokenizer, bert_model, pdf_text)
+pdf_embedding, pdf_keywords = calculate.calculate_pdf("files/cv2.pdf")
 
-print(pdf_embedding)
+with open(os.path.join("app", "data", "preloads.json"), "r") as file:
+    preloads = json.load(file)["preloads"]
+
+scores = {}
+for sector in config["sectors"]:
+    sector_embeddings = preloads[sector]["embeddings"]
+    sector_keywords = preloads[sector]["keywords"]
+
+    # Berekent de cos() van de angle tussen beide vectoren in de vectorruimte
+    cosine_similarity = util.cos_sim(pdf_embedding.tolist(), sector_embeddings).item()
+
+    # Aantal woorden in pdf die belangrijk zijn voor sector
+    keyword_overlap = len(pdf_keywords.intersection(sector_keywords))
+    
+    # print(sector, "cosine_similarity: ", cosine_similarity, "keyword_score: ", keyword_overlap / (len(sector_keywords) / 2))
+    score = 0.6 * cosine_similarity + 0.4 * (keyword_overlap / (len(sector_keywords) / 3)) ## / 3 weghalen als lemmitization
+    scores[sector] = round(score,2)
+
+print(scores)
