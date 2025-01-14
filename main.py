@@ -37,7 +37,7 @@ for sector in config["sectors"]:
     keyword_overlap = len(pdf_keywords.intersection(sector_keywords))
     
     # print(sector, "cosine_similarity: ", cosine_similarity, "keyword_score: ", keyword_overlap / (len(sector_keywords) / 2))
-    score = 0.6 * cosine_similarity + 0.4 * (keyword_overlap / (len(sector_keywords) / 3)) ## / 3 weghalen als lemmitization
+    score = 0.5 * cosine_similarity + 0.5 * (keyword_overlap / (len(sector_keywords) / 3)) ## / 3 weghalen als lemmitization
     scores[sector] = str(round(score * 100, 0))
 
 print(json.dumps(scores))

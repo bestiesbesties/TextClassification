@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV Matching</title>
+    <title>AI CV matcher</title>
     <link rel="stylesheet" href="app/public/home.css">
 
 </head>
@@ -11,22 +11,21 @@
 <body>
     <script src="/app/public/scripts/drop.js" defer></script>
 
-    
-
     <div class="front">
         <div class = "text-holder"> 
-            <h6 class="center-text text-1">Test your skills</h6>
-            <h2 class="center-text text-2">AI Job Sector Matcher</h2>
-            <p class="center-text text-3" >Drag & drop any CV onto the page, and wait for the results.</p>
+            <h1 class="center-text">AI CV matcher</h2>
+            <p class="center-text" >On this page you can check how well your CV matches to certain sectors.</p>
         </div>
 
         <div class="settings">
+            <div id="dropzone">Drop your .pdf here</div>
+
             <div class="button-container">
-                <button id="resetButton">reset data</button>
-                <button id="resetButton">calculate data</button>
+                <button class="model-button active">bert-base-uncased</button>
+                <button class="model-button">all-mini-LM-6</button>
+                <button class="model-button">jobBERT</button>
             </div>
-        
-            <div id="dropzone">Drop pdf here</div>
+
         </div>
 
         <div class="sectors">
@@ -35,25 +34,25 @@
                 <div class="sector-type">
                     <img class= "sector-image" src="/app/public/images/economy.png"></img>
                     <h4 class="center-text text-1">Economy</h4>
-                    <p id="economy-value"></p>
+                    <p id="economy-value">0%</p>
                 </div>
 
                 <div class="sector-type">
                     <img class= "sector-image" src="/app/public/images/health.png"></img>
                     <h4 class="center-text text-1">Health</h4>
-                    <p id="health-value"></p>
+                    <p id="health-value">0%</p>
                 </div>
 
                 <div class="sector-type">
                     <img class= "sector-image" src="/app/public/images/tech.png"></img>
                     <h4 class="center-text text-1">Tech</h4>
-                    <p id="tech-value"></p>
+                    <p id="tech-value">0%</p>
                 </div>
 
                 <div class="sector-type">
                     <img class= "sector-image" src="/app/public/images/agriculture.png"></img>
                     <h4 class="center-text text-1">Agriculture</h4>
-                    <p id="agriculture-value"></p>
+                    <p id="agriculture-value">0%</p>
                 </div>
 
             </div>
@@ -62,39 +61,43 @@
                 <div class="sector-type">
                     <img class= "sector-image" src="/app/public/images/construction.png"></img>
                     <h4 class="center-text text-1">Construction</h4>
-                    <p id="construction-value"></p>
+                    <p id="construction-value">0%</p>
                 </div>
 
                 <div class="sector-type">
                     <img class= "sector-image" src="/app/public/images/education.png"></img>
                     <h4 class="center-text text-1">Education</h4>
-                    <p id="education-value"></p>
+                    <p id="education-value">0%</p>
                 </div>
 
                 <div class="sector-type">
                     <img class= "sector-image" src="/app/public/images/legal.png"></img>
                     <h4 class="center-text text-1">Legal</h4>
-                    <p id="legal-value"></p>
+                    <p id="legal-value">0%</p>
                 </div>
 
                 <div class="sector-type">
                     <img class= "sector-image" src="/app/public/images/retail.png"></img>
                     <h4 class="center-text text-1">Retail</h4>
-                    <p id="retail-value"></p>
+                    <p id="retail-value">0%</p>
                 </div>
-
             </div>
-
         </div>
-
-
+        <p>Made with <3 by Leyton Sijpkens</p>
     </div>
 
     <script>
-        document.getElementById("resetButton").addEventListener("click", async () => {
-            const response = await fetch("/reset-db", {method:"POST"});
-            console.log(response)
-        })
+        var buttons = document.getElementsByClassName("model-button");
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].addEventListener("click", function() {
+                // Verwijder 'active' van alle knoppen
+                for (var j = 0; j < buttons.length; j++) {
+                    buttons[j].classList.remove("active");
+                }
+                // Voeg 'active' toe aan de aangeklikte knop
+                this.classList.add("active");
+            });
+        }
     </script>
         
 </body>
