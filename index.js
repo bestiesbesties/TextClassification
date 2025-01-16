@@ -38,9 +38,10 @@ app.post("/upload_run", upload.array("files"), (request, response) => {
     console.log("Uploading file");
     console.log("Client request:", request)
     const uploadedFilepath = request.files[0].path
+    const embeddingModelName = request.body.embedding_model_name
 
-    console.log("Executing procces on file: uploadedFilepath" )
-    const python = child_process.exec("python3 main.py '" + uploadedFilepath + "'", (error, stdout, stderr) => {
+    console.log("Executing procces on arguments:", uploadedFilepath, embeddingModelName)
+    const python = child_process.exec("python3 main.py "+ uploadedFilepath + " " + embeddingModelName, (error, stdout, stderr) => {
         if (error) {
             console.log("error: ", error)
             return response.status(500)

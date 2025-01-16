@@ -1,5 +1,10 @@
 {
     "config" : {
-        "sectors" : ["tech", "agriculture", "education", "retail", "health", "economy", "construction", "legal"]
+        "sectors" : ["tech", "agriculture", "education", "retail", "health", "economy", "construction", "legal"],
+        "model_mapping" : {
+            "bert-base-uncased" : "google-bert/bert-base-uncased",
+            "all-MiniLM-L6-v2" : "sentence-transformers/all-MiniLM-L6-v2",
+            "distilbert-base-uncased" : "distilbert/distilbert-base-uncased"
+        }
     }
 }

@@ -23,10 +23,12 @@ dropzone.addEventListener("drop", async (event) => {
     event.preventDefault(); // voorkomt dat de browser het bestand opent ipv opslaat.
     dropzone.classList.remove("dragover");
 
-    console.log("Handeling drop event")
+    console.log("Placing data in form structure")
+    const embeddingModelName = document.getElementsByClassName("model-button active")[0].textContent
     const files = event.dataTransfer.files;
     const formData = new FormData();
     formData.append("files", files[0]);
+    formData.append("embedding_model_name", embeddingModelName);
     alert("Bestand succesvol verstuurd naar de server");
     try {
         console.log("Posting to server")

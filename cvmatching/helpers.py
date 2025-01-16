@@ -1,6 +1,6 @@
 import numpy as np
 
-from cvmatching import summarize, embed, tokenize
+from cvmatching import embed, tokenize
 
 def state_document(tokenizer_model, embedding_model, text) -> np.array:
     # summ = summarize.summarize_MiniLM(text, 1)
