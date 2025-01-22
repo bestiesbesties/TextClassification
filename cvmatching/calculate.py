@@ -1,6 +1,6 @@
 import numpy as np
 
-from cvmatching import text, helpers, words, uniform
+from cvmatching import text, words, uniform
 
 def calculate_pdf(filepath:str, model_name:str) -> tuple[np.array, set]:
     sector_text = text.parse_pdf(filepath)
