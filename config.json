@@ -7,9 +7,9 @@
             "distilbert-base-uncased" : "distilbert/distilbert-base-uncased"
         },
         "model_embedding_dimmensions_mapping": {
-            "bert-base-uncased" : 768,
-            "all-MiniLM-L6-v2" : 512,
-            "distilbert-base-uncased" : 768
+            "google-bert/bert-base-uncased" : 768,
+            "sentence-transformers/all-MiniLM-L6-v2" : 512,
+            "distilbert/distilbert-base-uncased" : 768
         }
     }
 }
