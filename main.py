@@ -36,4 +36,7 @@ for sector in config["sectors"]:
     scores_dict[sector]["cosine_similarity"] = round(cosine_similarity, 2)
     scores_dict[sector]["keyword_overlap_adjusted"] = round(keyword_overlap_adjusted, 2)
 
-print(json.dumps(scores.export_scores(scores_dict)))
+faiss_scores = scores.faiss_similarity(pdf_embedding, config, preloads, embedding_model_path)
+
+combined_scores = scores.export_scores(scores_dict, faiss_scores)
+print(json.dumps(combined_scores))

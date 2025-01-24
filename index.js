@@ -6,14 +6,17 @@ const express = require("express"); // voor routing
 const multer = require("multer"); // voor storage
 const { stdout } = require("process");
 
+const uploadDir = path.join(__dirname, "uploads")
 
-
-const app = express();
+if (!fs.existsSync(uploadDir)) {
+    console.log("Created uploads folder in: ", __dirname)
+    fs.mkdirSync(uploadDir, { recursive: true})
+}
 
 // MULTER
 const storage = multer.diskStorage({
     destination : (req, file, callback) => {
-        callback(null, 'uploads/');
+        callback(null, uploadDir);
     },
     filename : (req, file, callback) => {
         callback(null, "upload-" + file.originalname);
@@ -21,6 +24,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage});
 
+const app = express();
 
 app.use("/app", express.static(path.join(__dirname, 'app')));
 
@@ -40,8 +44,9 @@ app.post("/upload_run", upload.array("files"), (request, response) => {
     const uploadedFilepath = request.files[0].path
     const embeddingModelName = request.body.embedding_model_name
 
-    console.log("Executing procces on arguments:", uploadedFilepath, embeddingModelName)
-    const python = child_process.exec("python3 main.py "+ uploadedFilepath + " " + embeddingModelName, (error, stdout, stderr) => {
+    const useFaiss = "False"
+    console.log("Executing procces on arguments:", uploadedFilepath, embeddingModelName, useFaiss)
+    const python = child_process.exec("python3 main.py "+ uploadedFilepath + " " + embeddingModelName + " " + useFaiss, (error, stdout, stderr) => {
         if (error) {
             console.log("error: ", error)
             return response.status(500)

@@ -1,6 +1,5 @@
 import re
 import logging
-import pandas as pd
 import PyPDF2
 
 def clean_text(text:str) -> str:
