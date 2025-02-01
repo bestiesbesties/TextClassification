@@ -1,12 +1,3 @@
-// import { sendToTerminal } from "./app/public/scripts/terminalengine.js";
-// import fs from 'fs';
-// import express from 'express'; // Routing
-// import multer from 'multer'; // Storage
-// import WebSocket from "ws"; // Realtime coms
-// import path from 'path';
-// import { exec, spawn } from 'child_process';
-// import { stdout } from 'process';
-
 const fs = require("fs");
 const path = require("path");
 const child_process = require("child_process");
@@ -23,8 +14,7 @@ const sendWebSocketServerMessageToAll = (type, message, activeWebSocketSessions)
             "type" : type,
             "message" : message
         };
-        socket.send(JSON.stringify(body)    );
-        // socket.send(JSON.stringify(body));
+        socket.send(JSON.stringify(body));
     });
 };
 
@@ -79,11 +69,11 @@ app.get("/", (request, response) => {
 
 app.post("/upload_run", upload.array("files"), (request, response) => {
 
-    sendWebSocketServerMessageToAll("terminal", "SERVER: Uploading file.", activeWebSocketSessions)
+    sendWebSocketServerMessageToAll("terminal", "SERVER: Storing file.", activeWebSocketSessions)
     const uploadedFilepath = request.files[0].path
     const embeddingModelName = request.body.embedding_model_name
 
-    const useFaiss = "False"
+    const useFaiss = "True"
 
     sendWebSocketServerMessageToAll("terminal", `SERVER: Executing process on arguments: ${uploadedFilepath} ${embeddingModelName} ${useFaiss}`, activeWebSocketSessions)
     console.log("Executing procces on arguments:", uploadedFilepath, embeddingModelName, useFaiss)

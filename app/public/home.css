@@ -171,6 +171,7 @@ p {
     margin-top: 20px;
     background-color: black;
     color: white;
+    font-size: 14px;
 }
 
 .realtime-text:hover {

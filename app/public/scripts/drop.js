@@ -21,11 +21,11 @@ dropzone.addEventListener("dragenter", (event) => {
 });
 
 dropzone.addEventListener("drop", async (event) => {
-    sendToTerminal("Handeling drop event")
+    sendToTerminal("CLIENT: Handeling drop event")
     event.preventDefault(); // voorkomt dat de browser het bestand opent ipv opslaat.
     dropzone.classList.remove("dragover");
 
-    sendToTerminal("Placing data in form structure");
+    sendToTerminal("CLIENT: Placing data in form structure");
     const embeddingModelName = document.getElementsByClassName("model-button active")[0].textContent
     const files = event.dataTransfer.files;
     const formData = new FormData();
@@ -33,7 +33,7 @@ dropzone.addEventListener("drop", async (event) => {
     formData.append("embedding_model_name", embeddingModelName);
     alert("Bestand succesvol verstuurd naar de server");
     try {
-        sendToTerminal("Posting to server");
+        sendToTerminal("CLIENT: Posting to server");
         const response = await fetch("/upload_run", {
             method: "POST",
             body: formData
@@ -41,7 +41,7 @@ dropzone.addEventListener("drop", async (event) => {
         
         if (response.ok) {
             const result = await response.json();
-            sendToTerminal(`result: ", ${result}`);
+            sendToTerminal(`CLIENT: Recieved: ", ${result}`);
             document.getElementById("economy-value").innerText = result.economy + "%";
             document.getElementById("health-value").innerText = result.health + "%";
             document.getElementById("tech-value").innerText = result.tech + "%";

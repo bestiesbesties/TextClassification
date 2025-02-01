@@ -117,15 +117,23 @@
             }
         })
 
+        var lastModelName = ""
         var buttons = document.getElementsByClassName("model-button");
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].addEventListener("click", function() {
-                // Verwijder 'active' van alle knoppen
+                // Delete 'active' from all buttons
                 for (var j = 0; j < buttons.length; j++) {
                     buttons[j].classList.remove("active");
                 }
-                // Voeg 'active' toe aan de aangeklikte knop
+                // Add 'active' to the pressed button
                 this.classList.add("active");
+                const newModelName = document.getElementsByClassName   ("model-button active")[0].textContent
+                
+                // Check if the selection is new
+                if (newModelName != lastModelName) {
+                    sendToTerminal(`CLIENT: Switched model request to: ${newModelName}`)
+                }
+                lastModelName = newModelName
             });
         }
     </script>
