@@ -1,19 +1,58 @@
+// import { sendToTerminal } from "./app/public/scripts/terminalengine.js";
+// import fs from 'fs';
+// import express from 'express'; // Routing
+// import multer from 'multer'; // Storage
+// import WebSocket from "ws"; // Realtime coms
+// import path from 'path';
+// import { exec, spawn } from 'child_process';
+// import { stdout } from 'process';
+
 const fs = require("fs");
 const path = require("path");
 const child_process = require("child_process");
+const express = require("express"); // Routing
+const multer = require("multer"); // Storage
+const WebSocket = require('ws'); // Realtime coms
+const crypto = require('crypto')
 
-const express = require("express"); // voor routing
-const multer = require("multer"); // voor storage
-const { stdout } = require("process");
+//*WEBSOCKET
+const sendWebSocketServerMessageToAll = (type, message, activeWebSocketSessions) => {
+    activeWebSocketSessions.forEach((socket, sessionID) => {
+        console.log(message);
+        const body = {
+            "type" : type,
+            "message" : message
+        };
+        socket.send(JSON.stringify(body)    );
+        // socket.send(JSON.stringify(body));
+    });
+};
 
-const uploadDir = path.join(__dirname, "uploads")
+const webSocketServer = new WebSocket.Server({ port: 4501 });
+const activeWebSocketSessions = new Map();
 
+webSocketServer.on("connection", (socket, request) => {
+
+    const sessionID = crypto.randomUUID()
+    activeWebSocketSessions.set(sessionID, socket)
+    console.log("TEMPLog", activeWebSocketSessions)
+    sendWebSocketServerMessageToAll("terminal", `SERVER: Started WebSocket Session on ID: ${sessionID}`, activeWebSocketSessions)
+
+    socket.on("close", (socket, reason) => {
+        console.log(`SERVER: Session ${sessionID}`)
+        activeWebSocketSessions.delete(sessionID)
+    })
+
+})
+
+//Server folder structure
+const uploadDir = "./uploads"
 if (!fs.existsSync(uploadDir)) {
     console.log("Created uploads folder in: ", __dirname)
     fs.mkdirSync(uploadDir, { recursive: true})
 }
 
-// MULTER
+//*MULTER
 const storage = multer.diskStorage({
     destination : (req, file, callback) => {
         callback(null, uploadDir);
@@ -26,7 +65,7 @@ const upload = multer({storage});
 
 const app = express();
 
-app.use("/app", express.static(path.join(__dirname, 'app')));
+app.use("/app", express.static("./app"));
 
 app.get("/", (request, response) => {
     fs.readFile("app/public/home.html", "utf8", (err, data) => {
@@ -39,12 +78,14 @@ app.get("/", (request, response) => {
 });
 
 app.post("/upload_run", upload.array("files"), (request, response) => {
-    console.log("Uploading file");
-    console.log("Client request:", request)
+
+    sendWebSocketServerMessageToAll("terminal", "SERVER: Uploading file.", activeWebSocketSessions)
     const uploadedFilepath = request.files[0].path
     const embeddingModelName = request.body.embedding_model_name
 
     const useFaiss = "False"
+
+    sendWebSocketServerMessageToAll("terminal", `SERVER: Executing process on arguments: ${uploadedFilepath} ${embeddingModelName} ${useFaiss}`, activeWebSocketSessions)
     console.log("Executing procces on arguments:", uploadedFilepath, embeddingModelName, useFaiss)
     const python = child_process.exec("python3 main.py "+ uploadedFilepath + " " + embeddingModelName + " " + useFaiss, (error, stdout, stderr) => {
         if (error) {
@@ -68,3 +109,4 @@ const PORT = 4500;
 app.listen(PORT, () => {
     console.log("Server running on http://localhost:" + PORT)
 });
+

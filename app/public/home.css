@@ -1,79 +1,125 @@
+/* common shared */
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0; 
+    margin-top: 10px; 
     font-family: Arial, sans-serif;
-    background-color: white;
-    margin: 0 auto;
-    transform: scale(0.8);
+    transform: scale(0.75);
     transform-origin: top;
+    background-color: #000!important;
+    background-size: 40px 40px;
+    background-image: radial-gradient(circle,hsla(0,0%,100%,.15) 1px,transparent 0)
+}
+
+.hasborder {
+    border: 8px solid #5a189a;
+    padding : 20px;
+    border-top-width: 14px;
+}
+
+.hasborder:hover {
+    background-color: #0f0f0f;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    row-gap: 20px;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+}
+
+/* common shared */
+
+/* left */
+
+.title {
+    font-family: "Tomorrow", Arial;
+    font-size: 30px;
+    color : #5a189a;
+    margin: 0;
+    margin-top: 30px;
+}
+
+.subtitle {
+    font-family: "Source Code Pro", Arial;
+    color : #5a189a;
+    margin: 0px;
 }
 
 .front {
     width: 700px;
-    padding: 20px;
-    background-color: #e9ecef;
 }
 .text-holder{
-    margin-top: 20px;
+    margin-top: -10px;
 }
 
 .center-text {
     text-align: center;
 }
 
-.model-button {
-    border: none;
-    outline: none;
-    padding: 10px 16px;
-    background-color: white;
-    cursor: pointer;
-    font-size: 18px;
-    border-radius: 15px;
-}
-
-.active, .model-button:hover {
-    background-color: #666;
-    color: white;
-}
-
 #dropzone {
+    border: 4px dashed #2E073F;
+    background-color: #5a189a;
     width: 350px;
     height: 200px;
-    border: 2px dashed #aaa;
-    border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 24px;
-    margin: 0px auto;
-    background-color: #dee2e6; 
+    margin: 0px;
 }
 
 #dropzone.dragover {
-    border-color: #333;
-    background-color: #bdbdbd;
+    background-color: #AD49E1;
+    color: black;
+}
+
+#dropzone:hover {
+    background-color: #AD49E1;
+    color: black;
 }
 
 .settings {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-rows: auto auto;
-    gap: 10px;
+    row-gap: 10;
     align-items: center;
-    padding-bottom: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    background: black;
 }
 
 .button-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 20px;
     align-items: center;
     justify-content: center; 
 }
 
-.sectors {
+.model-button {
+    border: 4px solid #2E073F;
+    background-color: #5a189a;
+    outline: none;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.active, .model-button:hover {
+    background-color: #AD49E1;
+    color: black;
+}
+
+.sector-rows{
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -82,18 +128,59 @@ body {
 .sector-row {
     display: flex; /* This will make the child elements align horizontally */
     justify-content: space-around; /* Distributes items evenly with some space between them */
-    padding: 10px 10;
 }
+
 .sector-type {
-    border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: white;
 }
 
-.sector-image {
-    border-radius: 15px;
-    width: 150px;
-    height: 150px;
+.sector-type p {
+    font-weight: bold;
+    color: #5a189a;
+    font-family: "Source Code Pro", Arial;
+
 }
+.sector-image {
+    width: 105px;
+    height: 105px;
+    margin-bottom: 10px;
+}
+
+.percent {
+    font-size: 30px;
+}
+/* left */
+
+/* right */
+.right{
+    width: 500px;
+}
+
+.anchored-text {
+    text-align: left;
+}
+
+.terminal {
+    margin: 30px;
+}
+
+.realtime-text-holder{
+    margin-bottom: 20px;
+    margin-top: 20px;
+    background-color: black;
+    color: white;
+}
+
+.realtime-text:hover {
+    color: red
+}
+
+#activeTerminal {
+    height: 600px;
+    overflow-y: auto;
+}
+
+/* right */
+

@@ -4,90 +4,119 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI CV matcher</title>
+    <link rel="stylesheet" href="app/public/bg.css">
     <link rel="stylesheet" href="app/public/home.css">
-
+    <link href="https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 </head>
 
-<body>
-    <script src="/app/public/scripts/drop.js" defer></script>
+<body class="dark w-full h-full space-y-10">
+    <script type="module" src="/app/public/scripts/drop.js" defer></script>
+    <div class="container"> 
+        <div clas="left">
+            <div class="front">
+                <div class = "text-holder"> 
+                    <h1 class="title center-text">AI CV to Sector Matcher</h1>
+                    <p class="subtitle center-text" >On this side you can drag & drop your CV in PDF format, to analyze how well your CV matches to the different preloaded sectors.</p>
+                </div>
 
-    <div class="front">
-        <div class = "text-holder"> 
-            <h1 class="center-text">AI CV matcher</h2>
-            <p class="center-text" >On this page you can check how well your CV matches to certain sectors.</p>
-        </div>
+                <div class="settings hasborder">
+                    <div id="dropzone">Drop your .pdf here</div>
 
-        <div class="settings">
-            <div id="dropzone">Drop your .pdf here</div>
+                    <div class="button-container">
+                        <button class="model-button active">bert-base-uncased</button>
+                        <button class="model-button">distilbert-base-uncased</button>
+                        <button class="model-button">all-MiniLM-L6-v2</button>
+                        
+                    </div>
 
-            <div class="button-container">
-                <button class="model-button active">bert-base-uncased</button>
-                <button class="model-button">distilbert-base-uncased</button>
-                <button class="model-button">all-MiniLM-L6-v2</button>
-                
+                </div>
+
+                <div class="sector-rows">
+
+                    <div class="sector-row">
+                        <div class="sector-type">
+                            <img class= "sector-image" src="/app/public/images/economy.svg"></img>
+                            <p class="center-text text-1">Economy</p>
+                            <p id="economy-value" class="percent">0%</p>
+                        </div>
+
+                        <div class="sector-type">
+                            <img class= "sector-image" src="/app/public/images/health.svg"></img>
+                            <p class="center-text text-1">Health</p>
+                            <p id="health-value" class="percent">0%</p>
+                        </div>
+
+                        <div class="sector-type">
+                            <img class= "sector-image" src="/app/public/images/tech.svg"></img>
+                            <p class="center-text text-1">Tech</p>
+                            <p id="tech-value" class="percent">0%</p>
+                        </div>
+
+                        <div class="sector-type">
+                            <img class= "sector-image" src="/app/public/images/agriculture.svg"></img>
+                            <p class="center-text text-1">Agriculture</p>
+                            <p id="agriculture-value" class="percent">0%</p>
+                        </div>
+
+                    </div>
+
+                    <div class="sector-row">
+                        <div class="sector-type">
+                            <img class= "sector-image" src="/app/public/images/construction.svg"></img>
+                            <p class="center-text text-1">Construction</p>
+                            <p id="construction-value" class="percent">0%</p>
+                        </div>
+
+                        <div class="sector-type">
+                            <img class= "sector-image" src="/app/public/images/education.svg"></img>
+                            <p class="center-text text-1">Education</p>
+                            <p id="education-value" class="percent">0%</p>
+                        </div>
+
+                        <div class="sector-type">
+                            <img class= "sector-image" src="/app/public/images/legal.svg"></img>
+                            <p class="center-text text-1">Legal</p>
+                            <p id="legal-value" class="percent">0%</p>
+                        </div>
+
+                        <div class="sector-type">
+                            <img class= "sector-image" src="/app/public/images/retail.svg"></img>
+                            <p class="center-text text-1">Retail</p>
+                            <p id="retail-value" class="percent">0%</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-
         </div>
-
-        <div class="sectors">
-
-            <div class="sector-row">
-                <div class="sector-type">
-                    <img class= "sector-image" src="/app/public/images/economy.png"></img>
-                    <h4 class="center-text text-1">Economy</h4>
-                    <p id="economy-value">0%</p>
+        <div class="right">
+            <div class="terminal">
+                <div class = "text-holder"> 
+                    <h1 class="title anchored-text">Terminal</h2>
+                    <p class="subtitle anchored-text" >On this side you can see what the backend and clients are doing in realtime.</p>
                 </div>
-
-                <div class="sector-type">
-                    <img class= "sector-image" src="/app/public/images/health.png"></img>
-                    <h4 class="center-text text-1">Health</h4>
-                    <p id="health-value">0%</p>
-                </div>
-
-                <div class="sector-type">
-                    <img class= "sector-image" src="/app/public/images/tech.png"></img>
-                    <h4 class="center-text text-1">Tech</h4>
-                    <p id="tech-value">0%</p>
-                </div>
-
-                <div class="sector-type">
-                    <img class= "sector-image" src="/app/public/images/agriculture.png"></img>
-                    <h4 class="center-text text-1">Agriculture</h4>
-                    <p id="agriculture-value">0%</p>
-                </div>
-
-            </div>
-
-            <div class="sector-row">
-                <div class="sector-type">
-                    <img class= "sector-image" src="/app/public/images/construction.png"></img>
-                    <h4 class="center-text text-1">Construction</h4>
-                    <p id="construction-value">0%</p>
-                </div>
-
-                <div class="sector-type">
-                    <img class= "sector-image" src="/app/public/images/education.png"></img>
-                    <h4 class="center-text text-1">Education</h4>
-                    <p id="education-value">0%</p>
-                </div>
-
-                <div class="sector-type">
-                    <img class= "sector-image" src="/app/public/images/legal.png"></img>
-                    <h4 class="center-text text-1">Legal</h4>
-                    <p id="legal-value">0%</p>
-                </div>
-
-                <div class="sector-type">
-                    <img class= "sector-image" src="/app/public/images/retail.png"></img>
-                    <h4 class="center-text text-1">Retail</h4>
-                    <p id="retail-value">0%</p>
+                <div id="activeTerminal" class="realtime-text-holder hasborder">
+                    <div class="realtime-text">>>> CLIENT: This is the start of your active session</div>
+                    <!-- RECIEVING FROM SERVER-->
                 </div>
             </div>
+            
         </div>
-        <p class="center-text text-1">Made with ❤️ by Leyton Sijpkens</p>
     </div>
 
-    <script>
+    <script type="module">
+        import { sendToTerminal } from "/app/public/scripts/terminalengine.js"
+        const webSocket = new WebSocket("ws://localhost:4501")
+
+        webSocket.addEventListener("message", (ev) => {
+            console.log("message from Remote: ", ev)
+            const data = JSON.parse(ev.data)
+
+            if (data.type == "terminal") {
+                sendToTerminal(data.message)
+            }
+        })
+
         var buttons = document.getElementsByClassName("model-button");
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].addEventListener("click", function() {
