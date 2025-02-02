@@ -5,8 +5,6 @@ This webbapp utilizes different text mining & nlp techniques including the parsi
 
 ![Demo gif](files/demo.gif)
 
-
-
 ## How to install.
 There are 2 ways to install and run the required complete node.js server
 
