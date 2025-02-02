@@ -6,7 +6,8 @@ const multer = require("multer"); // Storage
 const WebSocket = require('ws'); // Realtime coms
 const crypto = require('crypto')
 
-const selectedPORT = 4500;
+const PORTEXPRESS = 4500;
+const PORTWS = 4501;
 
 //*WEBSOCKET
 const sendWebSocketServerMessageToAll = (type, message, activeWebSocketSessions) => {
@@ -20,11 +21,12 @@ const sendWebSocketServerMessageToAll = (type, message, activeWebSocketSessions)
     });
 };
 
-const webSocketServer = new WebSocket.Server({ port: selectedPORT + 1 });
+const webSocketServer = new WebSocket.Server({ port: PORTWS });
 const activeWebSocketSessions = new Map();
 
 webSocketServer.on("connection", (socket, request) => {
 
+    console.log(socket)
     const sessionID = crypto.randomUUID()
     activeWebSocketSessions.set(sessionID, socket)
     sendWebSocketServerMessageToAll("terminal", `SERVER: Started WebSocket Session on ID: ${sessionID}`, activeWebSocketSessions)
@@ -104,7 +106,7 @@ app.post("/upload_run", upload.array("files"), (request, response) => {
 
 });
 
-app.listen(selectedPORT, () => {
-    console.log("Server running on http://localhost:" + selectedPORT)
+app.listen(PORTEXPRESS, () => {
+    console.log("Server running on http://localhost:" + PORTEXPRESS)
 });
 
