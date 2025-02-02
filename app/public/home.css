@@ -124,12 +124,13 @@ p {
 }
 
 .model-button {
+    font-family: "Source Code Pro", Arial;
     border: 4px solid #2E073F;
     background-color: #5a189a;
     outline: none;
-    padding: 10px 16px;
+    padding: 10px 12px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .active, .model-button:hover {

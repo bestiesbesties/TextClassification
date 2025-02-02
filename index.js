@@ -6,6 +6,8 @@ const multer = require("multer"); // Storage
 const WebSocket = require('ws'); // Realtime coms
 const crypto = require('crypto')
 
+const selectedPORT = 4500;
+
 //*WEBSOCKET
 const sendWebSocketServerMessageToAll = (type, message, activeWebSocketSessions) => {
     console.log("TOALL: ", message);
@@ -18,7 +20,7 @@ const sendWebSocketServerMessageToAll = (type, message, activeWebSocketSessions)
     });
 };
 
-const webSocketServer = new WebSocket.Server({ port: 4501 });
+const webSocketServer = new WebSocket.Server({ port: selectedPORT + 1 });
 const activeWebSocketSessions = new Map();
 
 webSocketServer.on("connection", (socket, request) => {
@@ -102,8 +104,7 @@ app.post("/upload_run", upload.array("files"), (request, response) => {
 
 });
 
-const PORT = 4500;
-app.listen(PORT, () => {
-    console.log("Server running on http://localhost:" + PORT)
+app.listen(selectedPORT, () => {
+    console.log("Server running on http://localhost:" + selectedPORT)
 });
 
