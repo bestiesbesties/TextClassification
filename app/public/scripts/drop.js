@@ -21,17 +21,25 @@ dropzone.addEventListener("dragenter", (event) => {
 });
 
 dropzone.addEventListener("drop", async (event) => {
-    sendToTerminal("CLIENT: Handeling drop event")
+    sendToTerminal("CLIENT: Handeling drop event");
     event.preventDefault(); // voorkomt dat de browser het bestand opent ipv opslaat.
+    event.stopPropagation(); // voorkomt dat andere eventlisterers getriggerd worden
     dropzone.classList.remove("dragover");
+
+    document.getElementById("spinner").style.display = "block";
+    document.getElementById("body").classList.add("darken");
 
     sendToTerminal("CLIENT: Placing data in form structure");
     const embeddingModelName = document.getElementsByClassName("model-button active")[0].textContent
+
     const files = event.dataTransfer.files;
+    sendToTerminal(`CLIENT: Amount of files recieved in drop: ${files.length}`)
+
+    console.log("event", event)
+    console.log("event.dataTransfer.files:", event.dataTransfer.files)
     const formData = new FormData();
     formData.append("files", files[0]);
     formData.append("embedding_model_name", embeddingModelName);
-    alert("Bestand succesvol verstuurd naar de server");
     try {
         sendToTerminal("CLIENT: Posting to server");
         const response = await fetch("/upload_run", {
@@ -41,7 +49,7 @@ dropzone.addEventListener("drop", async (event) => {
         
         if (response.ok) {
             const result = await response.json();
-            sendToTerminal(`CLIENT: Recieved: ", ${result}`);
+            sendToTerminal(`CLIENT: Recieved: ", ${JSON.stringify(result)}`);
             document.getElementById("economy-value").innerText = result.economy + "%";
             document.getElementById("health-value").innerText = result.health + "%";
             document.getElementById("tech-value").innerText = result.tech + "%";
@@ -52,10 +60,14 @@ dropzone.addEventListener("drop", async (event) => {
             document.getElementById("legal-value").innerText = result.legal + "%";
             document.getElementById("retail-value").innerText = result.retail + "%";
         } else {
-            alert("Error on serverside");
+            sendToTerminal("CLIENT: Error on serverside");
         }
 
     } catch (error) {
-        sendToTerminal(`error: ${error}`)
+        document.getElementById("spinner").style.display = "block";
+        document.getElementById("body").classList.add("darken")
+        sendToTerminal(`CLIENT: An error occured: ${error}`)
     }
+    document.getElementById("spinner").style.display = "none";
+    document.getElementById("body").classList.remove("darken")
 });

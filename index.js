@@ -8,8 +8,8 @@ const crypto = require('crypto')
 
 //*WEBSOCKET
 const sendWebSocketServerMessageToAll = (type, message, activeWebSocketSessions) => {
+    console.log("TOALL: ", message);
     activeWebSocketSessions.forEach((socket, sessionID) => {
-        console.log(message);
         const body = {
             "type" : type,
             "message" : message
@@ -25,11 +25,10 @@ webSocketServer.on("connection", (socket, request) => {
 
     const sessionID = crypto.randomUUID()
     activeWebSocketSessions.set(sessionID, socket)
-    console.log("TEMPLog", activeWebSocketSessions)
     sendWebSocketServerMessageToAll("terminal", `SERVER: Started WebSocket Session on ID: ${sessionID}`, activeWebSocketSessions)
 
     socket.on("close", (socket, reason) => {
-        console.log(`SERVER: Session ${sessionID}`)
+        sendWebSocketServerMessageToAll("terminal", `SERVER: Closing session ${sessionID}`, activeWebSocketSessions)
         activeWebSocketSessions.delete(sessionID)
     })
 
@@ -69,14 +68,13 @@ app.get("/", (request, response) => {
 
 app.post("/upload_run", upload.array("files"), (request, response) => {
 
-    sendWebSocketServerMessageToAll("terminal", "SERVER: Storing file.", activeWebSocketSessions)
+    sendWebSocketServerMessageToAll("terminal", `SERVER: Storing recieved request.files:  ${JSON.stringify(request.files)}`, activeWebSocketSessions)
     const uploadedFilepath = request.files[0].path
     const embeddingModelName = request.body.embedding_model_name
 
     const useFaiss = "True"
 
-    sendWebSocketServerMessageToAll("terminal", `SERVER: Executing process on arguments: ${uploadedFilepath} ${embeddingModelName} ${useFaiss}`, activeWebSocketSessions)
-    console.log("Executing procces on arguments:", uploadedFilepath, embeddingModelName, useFaiss)
+    sendWebSocketServerMessageToAll("terminal", `SERVER: Executing Python process on arguments: ${uploadedFilepath} ${embeddingModelName} ${useFaiss}`, activeWebSocketSessions)
     const python = child_process.exec("python3 main.py "+ uploadedFilepath + " " + embeddingModelName + " " + useFaiss, (error, stdout, stderr) => {
         if (error) {
             console.log("error: ", error)
@@ -89,10 +87,19 @@ app.post("/upload_run", upload.array("files"), (request, response) => {
         
         console.log("stdout: ", stdout)
         const cleanedJson = JSON.parse(stdout.trim())
-        console.log("cleanedJson: ", cleanedJson)
+        console.log(`cleanedJson: ${JSON.stringify(cleanedJson)}`)
         
+        fs.unlink(request.files[0].path, (error) => {
+            if (error) {
+                sendWebSocketServerMessageToAll("terminal", "SERVER: Could not delete upload", activeWebSocketSessions);
+            } else {
+                sendWebSocketServerMessageToAll("terminal", "SERVER: Deleted upload on disk", activeWebSocketSessions);
+            }
+        });       
+
         response.status(200).json(cleanedJson)
     });
+
 });
 
 const PORT = 4500;

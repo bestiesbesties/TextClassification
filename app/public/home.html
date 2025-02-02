@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI CV matcher</title>
-    <link rel="stylesheet" href="app/public/bg.css">
     <link rel="stylesheet" href="app/public/home.css">
     <link href="https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
 </head>
 
-<body class="dark w-full h-full space-y-10">
+<body id="body">
     <script type="module" src="/app/public/scripts/drop.js" defer></script>
+
+    <div id="spinner" class="spinner" style="display:none;">
+        <img src="app/public/images/spinner.svg" alt="Loading...">
+    </div>
+
+
     <div class="container"> 
+
         <div clas="left">
             <div class="front">
                 <div class = "text-holder"> 

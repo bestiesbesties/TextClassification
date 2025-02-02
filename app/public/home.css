@@ -13,6 +13,11 @@ body {
     background-image: radial-gradient(circle,hsla(0,0%,100%,.15) 1px,transparent 0)
 }
 
+.darken {
+    opacity: 0.75;
+    background-image: radial-gradient(circle,hsla(0,0%,100%,.1) 1px,transparent 0)
+}
+
 .hasborder {
     border: 8px solid #5a189a;
     padding : 20px;
@@ -35,6 +40,19 @@ p {
     padding: 0;
 }
 
+.spinner {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 125px;
+    height: 125px;
+}
+
+.overlay {
+    position: fixed;
+
+}
 /* common shared */
 
 /* left */
