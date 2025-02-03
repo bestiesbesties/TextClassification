@@ -1,6 +1,11 @@
 import argparse
 
-def create_parser():
+def create_parser() -> argparse.ArgumentParser:
+    """Creates an argument parser to input arguments from the CLI.
+
+    Returns:
+        argparse.ArgumentParser: Configured argument parser object.
+    """
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -11,7 +16,7 @@ def create_parser():
     parser.add_argument(
         "embedding_model_name", 
         type=str, 
-        help="The name of the embedding model of which the embeddings have to be generated with."
+        help="The name of the embedding model of which the embeddings have to be created with."
     )
     parser.add_argument(
         "use_faiss",

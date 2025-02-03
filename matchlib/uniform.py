@@ -2,6 +2,15 @@ import numpy as np
 from transformers import AutoTokenizer, AutoModel
 
 def uniform_run(text:str, model_name:str) -> np.array:
+    """Loads the requested model and runs the pipeline to create word embeddings.
+
+    Args:
+        text (str): Parsed text from PDF file.
+        model_name (str): Requested model to search for modelpath
+
+    Returns:
+        np.array: Vector containing word embeddings
+    """
 
     tokenizer_model = AutoTokenizer.from_pretrained(model_name)
     embedding_model = AutoModel.from_pretrained(model_name)
