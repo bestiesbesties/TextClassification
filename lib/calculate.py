@@ -1,6 +1,6 @@
 import numpy as np
 
-from matchlib import text, words
+from lib import text, words
 from model import uniform
 
 def calculate_pdf(filepath:str, model_name:str) -> tuple[np.array, set]:

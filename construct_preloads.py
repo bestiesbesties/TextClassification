@@ -1,7 +1,7 @@
 import os
 import json
 
-from cvmatching import calculate, uniform
+from lib import calculate
 with open("config.json", "r") as file:
     config = json.load(file)["config"]
 

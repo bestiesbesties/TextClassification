@@ -2,7 +2,7 @@ import os
 from importlib import reload
 import json
 
-from matchlib import calculate, arguments, scores
+from lib import calculate, arguments, scores
 
 config = json.load(open("config.json", "r"))["config"]
 preloads = json.load(open(os.path.join("app", "data", "preloads.json"), "r"))["preloads"]
