@@ -1,6 +1,7 @@
 import numpy as np
 
-from matchlib import text, words, uniform
+from matchlib import text, words
+from model import uniform
 
 def calculate_pdf(filepath:str, model_name:str) -> tuple[np.array, set]:
     """Runs pipeline to create embeddings and combine extracted filtered keywords.
@@ -18,12 +19,11 @@ def calculate_pdf(filepath:str, model_name:str) -> tuple[np.array, set]:
     ## Make Spacy Doc from cleaned text 
     sector_text_clean_filter = words.remove_stopwords(words.make_doc(sector_text_clean))
 
-    sector_embeddings = uniform.uniform_run(text=sector_text_clean_filter, model_name=model_name)
+    model = uniform.Model(model_name)
+    sector_embeddings = model.run(sector_text_clean_filter)
 
     ## Make Spacy Doc from cleaned & filtered text
     sector_keywords = words.extract_keywords(words.make_doc(sector_text_clean_filter))
 
     return(sector_embeddings, sector_keywords)
-
-
     
