@@ -3,7 +3,7 @@ from importlib import reload
 import json
 
 from lib import parser, arguments
-from model import model
+from model import _model
 
 config = json.load(open("config.json", "r"))["config"]
 preloads = json.load(open(os.path.join("app", "data", "preloads.json"), "r"))["preloads"]
@@ -20,7 +20,7 @@ embedding_model_name = "bert-base-uncased"
 embedding_model_path = config["model_mapping"][embedding_model_name]
 use_faiss = True
 
-classification_model = model.Model(
+classification_model = _model.Model(
     model_path=embedding_model_path,
     config=config,
     sectors=config["sectors"], 
