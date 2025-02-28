@@ -2,40 +2,31 @@ import os
 from importlib import reload
 import json
 
-from lib import calculate, arguments, scores
+from lib import parser, arguments
+from model import model
 
 config = json.load(open("config.json", "r"))["config"]
 preloads = json.load(open(os.path.join("app", "data", "preloads.json"), "r"))["preloads"]
 
-parser = arguments.create_parser()
-namespace = parser.parse_args()
-file_path = namespace.file_path
-embedding_model_name = namespace.embedding_model_name
+# parser = arguments.create_parser()
+# namespace = parser.parse_args()
+# file_path = namespace.file_path
+# embedding_model_name = namespace.embedding_model_name
+# embedding_model_path = config["model_mapping"][embedding_model_name]
+# use_faiss = True if namespace.use_faiss == "True" else False
+
+file_path = os.path.join("files","cvs","cv2.pdf")
+embedding_model_name = "bert-base-uncased"
 embedding_model_path = config["model_mapping"][embedding_model_name]
-use_faiss = True if namespace.use_faiss == "True" else False
+use_faiss = True
 
-pdf_embedding, pdf_keywords = calculate.calculate_pdf(file_path, embedding_model_path)
+classification_model = model.Model(
+    model_path=embedding_model_path,
+    config=config,
+    sectors=config["sectors"], 
+    preloads=preloads
+    )
 
-scores_dict = {}
-for sector in config["sectors"]:
-
-    ## Preloaded embeddings van aangegeven model inladen
-    sector_embeddings = preloads[embedding_model_path][sector]["embeddings"]
-    sector_keywords = preloads[embedding_model_path][sector]["keywords"]
-
-    # Berekent de cos() van de angle tussen beide vectoren in de vectorruimte
-    cosine_similarity = scores.cosine_similarity(pdf_embedding.tolist(), sector_embeddings)
-
-    # Aantal woorden in pdf die belangrijk zijn voor sector
-    keyword_overlap = len(pdf_keywords.intersection(sector_keywords))
-    adjust = int(len(sector_keywords) / 3)
-    keyword_overlap_adjusted = keyword_overlap / adjust
-    
-    scores_dict[sector] = {}
-    scores_dict[sector]["cosine_similarity"] = round(cosine_similarity, 2)
-    scores_dict[sector]["keyword_overlap_adjusted"] = round(keyword_overlap_adjusted, 2)
-
-faiss_scores = scores.faiss_similarity(pdf_embedding, config, preloads, embedding_model_path)
-
-combined_scores = scores.export_scores(scores_dict, faiss_scores)
-print(json.dumps(combined_scores))
+parsed_pdf_txt = parser.pdf(file_path)
+sector = classification_model.predict(parsed_pdf_txt)
+print(sector)
