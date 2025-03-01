@@ -1,19 +1,19 @@
 import os
+from datetime import datetime
 import json
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
 
-from lib import parser
+from lib import parser, filehandler
 from model import chars, words, scores
 
 class Model:
-    def __init__(self, model_path:str, config:dict, sectors:list, preloads:dict|None=None):
+    def __init__(self, model_path:str, config:dict, preloads:dict|None=None):
         self.config = config
         self.model_path = model_path
         self.tokenizer_model = AutoTokenizer.from_pretrained(model_path)
         self.embedding_model = AutoModel.from_pretrained(model_path)
-        ## load trained data
-        self.sectors = sectors
+        ## Load trained data
         self.preloads = preloads
 
     def __tokenize(self, text:str) -> any:
@@ -50,11 +50,11 @@ class Model:
 
     def __classification(self, doc_embedding:np.array, doc_keywords:set) -> dict:
         scores_dict = {}
-        for sector in self.sectors:
+        for sector in self.preloads["sectors"]:
 
             ## Preloaded data respective to requested model
-            sector_embeddings = self.preloads[sector]["embeddings"]
-            sector_keywords = self.preloads[sector]["keywords"]
+            sector_embeddings = self.preloads["data"][sector]["embeddings"]
+            sector_keywords = self.preloads["data"][sector]["keywords"]
 
             # Calculate cos() of the angle between both vectors in N dimensional space
             cosine_similarity = scores.cosine_similarity(doc_embedding.tolist(), sector_embeddings)
@@ -73,24 +73,31 @@ class Model:
         best_combined_score = scores.export_score(scores_dict, faiss_scores)
         return best_combined_score
     
-    def fit(self, folder_path:str):
+    def fit(self, folder_path:str, save_to:str=None):
         preloads = {}
 
-        for sector in self.sectors:   
+        files = filehandler.find_files_with_extension(folder_path, ".pdf")
+        preloads["sectors"] = [file.split(f"{os.sep}")[-1].replace(".pdf", "") for file in files]
+        print(f"Fitting model for: {preloads["sectors"]}")
+
+        preloads["data"] = {}
+        for sector in preloads["sectors"]:   
             sector_text = parser.pdf(os.path.join(folder_path, sector+".pdf"))
             sector_embeddings, sector_keywords = self.__calculate(sector_text)
 
-            preloads[sector] = {
+            preloads["data"][sector] = {
                 "embeddings" : sector_embeddings.tolist(),
                 "keywords" : list(sector_keywords)
                 }
-        
-        print(f"Model fitted for {list(preloads.keys())}, \n saving preloads.")
-
         self.preloads = preloads
-        with open(os.path.join("app", "data", "preloads.json"), "w") as file:
-            json.dump({"preloads" : preloads}, file)
-        
+
+        if save_to:
+            now = datetime.now().strftime("%Y-%m-%d_%H-%M")
+            save_to_loc = os.path.join(save_to, f"at_{now}_preloads.json")
+            print(f"Saving preloads to {save_to_loc}")
+            with open(save_to_loc, "w") as file:
+                json.dump({"preloads" : preloads}, file)
+         
 
     def predict(self, text:str) -> str:
         if not self.preloads:

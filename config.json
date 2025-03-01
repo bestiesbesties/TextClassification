@@ -1,6 +1,5 @@
 {
     "config" : {
-        "sectors" : ["tech", "healthcare", "construction"],
         "model_mapping" : {
             "bert-base-uncased" : "google-bert/bert-base-uncased",
             "all-MiniLM-L6-v2" : "sentence-transformers/all-MiniLM-L6-v2",

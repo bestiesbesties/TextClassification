@@ -20,7 +20,7 @@ def cosine_similarity(v1:list, v2:list) -> float:
 
     return dot_product / (magnitude_v1 * magnitude_v2)
 
-def __get_all_embeddings(config:dict, preloads:dict) -> np.array:
+def __get_all_embeddings(preloads:dict) -> np.array:
     """Loads all preloaded embeddings for specific sector.
 
     Args:
@@ -32,8 +32,8 @@ def __get_all_embeddings(config:dict, preloads:dict) -> np.array:
         np.array: Array of embeddings.
     """
     all_emb = []
-    for sector in config["sectors"]:
-        all_emb.append(preloads[sector]["embeddings"])
+    for sector in preloads["sectors"]:
+        all_emb.append(preloads["data"][sector]["embeddings"])
     return np.array(all_emb)
 
 def export_score(scores_dict:dict, faiss_scores:dict=None) -> str:
@@ -80,16 +80,16 @@ def faiss_similarity(pdf_embedding:np.array, config:dict, preloads:dict, embeddi
     Returns:
         dict: FAISS score mapped to sector name.
     """
-    all_embeddings = __get_all_embeddings(config, preloads)
+    all_embeddings = __get_all_embeddings(preloads)
     
     model_embedding_dimmensions = config["model_embedding_dimmensions_mapping"][embedding_model_path]
     index = faiss.IndexFlatL2(model_embedding_dimmensions)
     index.add(all_embeddings)
-    distances, indeces = index.search(np.array([pdf_embedding]), len(config["sectors"]))
+    distances, indeces = index.search(np.array([pdf_embedding]), len(preloads["sectors"]))
 
     faiss_scores = {}
     for distance, indence in zip(distances[0].tolist(), indeces[0].tolist()):
-        faiss_scores[config["sectors"][indence]] = distance
+        faiss_scores[preloads["sectors"][indence]] = distance
 
     return faiss_scores
 

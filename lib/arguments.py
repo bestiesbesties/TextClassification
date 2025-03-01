@@ -18,11 +18,5 @@ def create_parser() -> argparse.ArgumentParser:
         type=str, 
         help="The name of the embedding model of which the embeddings have to be created with."
     )
-    parser.add_argument(
-        "use_faiss",
-        type=str,
-        choices=["True", "False"],
-        help="Include ranking calculated with fais in scores"
-    )
 
     return parser
