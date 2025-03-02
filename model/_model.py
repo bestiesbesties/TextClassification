@@ -77,12 +77,12 @@ class Model:
         preloads = {}
 
         files = filehandler.find_files_with_extension(folder_path, ".pdf")
-        preloads["sectors"] = [file.split(f"{os.sep}")[-1].replace(".pdf", "") for file in files]
+        preloads["sectors"] = [file.split(f"{os.sep}")[-1].replace(".pdf", "").replace("_", " ") for file in files]
         print(f"Fitting model for: {preloads["sectors"]}")
 
         preloads["data"] = {}
-        for sector in preloads["sectors"]:   
-            sector_text = parser.pdf(os.path.join(folder_path, sector+".pdf"))
+        for file, sector in zip(files, preloads["sectors"]):   
+            sector_text = parser.pdf(file)
             sector_embeddings, sector_keywords = self.__calculate(sector_text)
 
             preloads["data"][sector] = {

@@ -1,0 +1,42 @@
+Evaluation of model 'at_2025-03-01_17-25' 
+
+
+Accuracy: 0.81 
+
+      Metric  Macro  Micro  Weighted
+0  Precision   0.83   0.81      0.82
+1     Recall   0.81   0.81      0.82
+2         F1   0.81   0.81      0.81
+
+{
+    "information technology": {
+        "tp": 104,
+        "fp": 43,
+        "tn": 181,
+        "fn": 8,
+        "precision": 0.71,
+        "recall": 0.93,
+        "f1": 0.81,
+        "total": 155
+    },
+    "healthcare": {
+        "tp": 77,
+        "fp": 11,
+        "tn": 213,
+        "fn": 35,
+        "precision": 0.88,
+        "recall": 0.69,
+        "f1": 0.77,
+        "total": 123
+    },
+    "construction": {
+        "tp": 90,
+        "fp": 11,
+        "tn": 213,
+        "fn": 22,
+        "precision": 0.89,
+        "recall": 0.8,
+        "f1": 0.84,
+        "total": 123
+    }
+}

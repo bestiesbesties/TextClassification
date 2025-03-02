@@ -17,7 +17,6 @@ preloads = json.load(open(os.path.join("eval", "preloads", "preloads.json"), "r"
 pdf_file_path = os.path.join("eval","cvs","cv2.pdf")
 embedding_model_name = "bert-base-uncased"
 embedding_model_path = config["model_mapping"][embedding_model_name]
-use_faiss = True
 
 classification_model = Model(
     model_path=embedding_model_path,

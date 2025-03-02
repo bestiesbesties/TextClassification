@@ -65,7 +65,7 @@ def export_score(scores_dict:dict, faiss_scores:dict=None) -> str:
         if sector_score > best_sector_score:
             best_sector_name = sector_name
             best_sector_score = sector_score
-
+    # return best_sector_name, best_sector_score
     return best_sector_name
 
 def faiss_similarity(pdf_embedding:np.array, config:dict, preloads:dict, embedding_model_path:str) -> dict:
