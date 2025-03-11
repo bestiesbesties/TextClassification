@@ -37,7 +37,7 @@ def evaluate(df:pd.DataFrame, title:str, duration:str="No data") -> None:
         file.write(f"Evaluation of model '{title}'")
         file.write("\n\n-- General evalutation --\n")
         file.write(f"Duration: {duration}\nAccuracy: {accuracy}")
-        file.write("\n\n-- Specific scores --\n")
+        file.write("\n\n-- General scores --\n")
         file.write(evaluation)
         file.write("\n\n-- Confusion matrix --\n")
         file.write(cf_matrix)

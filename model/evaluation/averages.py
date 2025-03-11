@@ -11,7 +11,6 @@ def macro_averages(scores:dict) -> tuple:
     return macro_precision, macro_recall, macro_f1
 
 def micro_averages(scores:dict) -> tuple:
-    print(scores)
     total_tp = sum([scores[key]["tp"] for key in scores.keys()])
     total_fp = sum([scores[key]["fp"] for key in scores.keys()])
     total_fn = sum([scores[key]["fn"] for key in scores.keys()])

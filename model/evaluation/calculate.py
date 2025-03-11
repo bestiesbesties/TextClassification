@@ -38,4 +38,8 @@ def cf_matrix(df:pd.DataFrame):
         row = row[1]
         cf_matrix[row["Label"]][row["Prediction"]] += 1
 
-    return pd.DataFrame(data=cf_matrix)
+    ## Transpose beacause "If data is a dict, column order follows insertion-order.".
+    ## Therefore true's would be columns (vertical) instead of rows (horizontal).
+    cf_matrix_df = pd.DataFrame(data=cf_matrix).T
+
+    return cf_matrix_df
