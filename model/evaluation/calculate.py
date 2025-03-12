@@ -34,8 +34,9 @@ def cf_matrix(df:pd.DataFrame):
     labels = list(df["Label"].unique())
     cf_matrix = {true: {pred: 0 for pred in labels} for true in labels} ## sqaure matrix on true and pred
 
-    for row in df.iterrows():
-        row = row[1]
+    for _, row in df.iterrows():
+        if row["Prediction"] not in labels:
+            continue
         cf_matrix[row["Label"]][row["Prediction"]] += 1
 
     ## Transpose beacause "If data is a dict, column order follows insertion-order.".

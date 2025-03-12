@@ -3,6 +3,7 @@ from datetime import datetime
 import json
 import numpy as np
 from transformers import AutoTokenizer, AutoModel
+import torch
 
 from lib import parser, filehandler
 from model import chars, words, scores
@@ -10,34 +11,62 @@ from model import chars, words, scores
 class Model:
     def __init__(self, model_path:str, config:dict, preloads:dict|None=None):
         self.config = config
-        self.model_path = model_path
+        self.model_path = str(model_path)
         self.tokenizer_model = AutoTokenizer.from_pretrained(model_path)
         self.embedding_model = AutoModel.from_pretrained(model_path)
+        self.pad_token_id = self.tokenizer_model.pad_token_id
+        self.MID = int(config["model_input_dimmensions_mapping"][self.model_path])
         ## Load trained data
         self.preloads = preloads
 
-    def __tokenize(self, text:str) -> any:
-        return self.tokenizer_model(
-            text=text,
-            return_tensors = "pt",
-            padding = "max_length",
-            truncation = True, 
-            max_length = 512
-        )
     
-    def __embed(self, tokens:dict) -> dict:
-        return self.embedding_model.forward(
-            input_ids=tokens["input_ids"], 
-            attention_mask=tokens["attention_mask"]
+    def __get_padded_chunk(self, chunk:list) -> torch.tensor:
+        padding_length = self.MID - len(chunk)
+        # Pad to specific lenght (Model Input Dimmension), if the chunk is smaller than MID
+        chunk_padded = chunk + [self.pad_token_id] * padding_length
+        return torch.tensor(chunk_padded)
+
+    def __tokenize(self, text:str) -> tuple[torch.tensor, torch.tensor]:
+        tokenizer_output = self.tokenizer_model(text=text)
+
+        ## Split tokenizer output into tokens and attentions
+        tokens = tokenizer_output["input_ids"]
+        attentions = tokenizer_output["attention_mask"]
+
+        ## Conditionally split tokens & attentions into smaller lists
+        # if len(tokens) < self.MID:
+        #     chunks_tokens = tokens
+        #     chunks_attentions = attentions
+
+        if len(tokens) == len(attentions):
+            chunks_tokens = [tokens[i:i+self.MID] for i in range(0, len(tokens), self.MID)]
+            chunks_attentions = [attentions[i:i+self.MID] for i in range(0, len(attentions), self.MID)]
+        
+        else:
+            raise ValueError("tokens and attentions are not of same size")
+
+        ## Proper batch tensor using torch.stack()
+        padded_chunks_tokens = torch.stack([self.__get_padded_chunk(chunk) for chunk in chunks_tokens])
+        padded_chunks_attentions = torch.stack([self.__get_padded_chunk(chunk) for chunk in chunks_attentions])
+        
+        return padded_chunks_tokens, padded_chunks_attentions
+    
+    def __embed(self, tokens:torch.tensor, attentions:torch.tensor) -> dict:
+        return self.embedding_model(
+            input_ids=tokens, 
+            attention_mask=attentions
         )
 
     def __get_embbeding(self, text:str) -> np.array:
-        tokens = self.__tokenize(text)
-        embeddings = self.__embed(tokens)
-        ## Make 1 dimensional numpdisy from embedding_model output
-        last_hidden_state = embeddings.last_hidden_state[:,0,:]
-        return last_hidden_state.detach().numpy().squeeze()
-    
+        tokens, attentions = self.__tokenize(text)
+        embeddings = self.__embed(tokens, attentions)
+        ## Using mean to 1 dim (combined) instead of last_hidden_state (individual dim)
+        last_hidden_state_mean  = embeddings.last_hidden_state.mean(dim=(0,1))
+        ## Required detaching to stop gradient tracking, saves memory
+        last_hidden_state_mean_list = last_hidden_state_mean.detach().cpu().numpy().flatten().tolist()
+        return last_hidden_state_mean_list
+
+
     def __calculate(self, text:str):
         ## .1 clean text
         text_cleaned = chars.clean(text)
@@ -48,8 +77,9 @@ class Model:
         doc_keywords = words.extract_keywords(words.make_doc(text_filtered))
         return doc_embedding, doc_keywords
 
-    def __classification(self, doc_embedding:np.array, doc_keywords:set) -> dict:
+    def __classification(self, doc_embedding:list, doc_keywords:set) -> dict:
         scores_dict = {}
+        # print("len(doc_embedding): ", len(doc_embedding))
         for sector in self.preloads["sectors"]:
 
             ## Preloaded data respective to requested model
@@ -57,7 +87,7 @@ class Model:
             sector_keywords = self.preloads["data"][sector]["keywords"]
 
             # Calculate cos() of the angle between both vectors in N dimensional space
-            cosine_similarity = scores.cosine_similarity(doc_embedding.tolist(), sector_embeddings)
+            cosine_similarity = scores.cosine_similarity(doc_embedding, sector_embeddings)
 
             # Amount of words in document which are important for sector
             keyword_overlap = len(doc_keywords.intersection(sector_keywords))
@@ -86,7 +116,7 @@ class Model:
             sector_embeddings, sector_keywords = self.__calculate(sector_text)
 
             preloads["data"][sector] = {
-                "embeddings" : sector_embeddings.tolist(),
+                "embeddings" : sector_embeddings,
                 "keywords" : list(sector_keywords)
                 }
         self.preloads = preloads
@@ -105,6 +135,7 @@ class Model:
             return
 
         doc_embedding, doc_keywords = self.__calculate(text)
+        # print("len(doc_embedding): ", len(doc_embedding))
         best_combined_score = self.__classification(doc_embedding, doc_keywords)
         return best_combined_score
 

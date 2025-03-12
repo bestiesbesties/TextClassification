@@ -5,10 +5,15 @@
             "all-MiniLM-L6-v2" : "sentence-transformers/all-MiniLM-L6-v2",
             "distilbert-base-uncased" : "distilbert/distilbert-base-uncased"
         },
-        "model_embedding_dimmensions_mapping": {
+        "model_output_dimmensions_mapping": {
             "google-bert/bert-base-uncased" : 768,
             "sentence-transformers/all-MiniLM-L6-v2" : 384,
             "distilbert/distilbert-base-uncased" : 768
+        },
+        "model_input_dimmensions_mapping": {
+            "google-bert/bert-base-uncased" : 512,
+            "sentence-transformers/all-MiniLM-L6-v2" : 512,
+            "distilbert/distilbert-base-uncased" : 512
         }
     }
 }

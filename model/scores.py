@@ -82,8 +82,9 @@ def faiss_similarity(pdf_embedding:np.array, config:dict, preloads:dict, embeddi
     """
     all_embeddings = __get_all_embeddings(preloads)
     
-    model_embedding_dimmensions = config["model_embedding_dimmensions_mapping"][embedding_model_path]
-    index = faiss.IndexFlatL2(model_embedding_dimmensions)
+    output_dimmensions = config["model_output_dimmensions_mapping"][embedding_model_path]
+
+    index = faiss.IndexFlatL2(output_dimmensions)
     index.add(all_embeddings)
     distances, indeces = index.search(np.array([pdf_embedding]), len(preloads["sectors"]))
 

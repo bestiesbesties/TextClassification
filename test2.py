@@ -1,0 +1,32 @@
+import os
+import json
+import pandas as pd
+from model import Model
+from model.evaluation import batch
+
+## Configurate model variables
+duration = None
+run = "at_2025-03-11_17-27"
+
+config = json.load(open("config.json", "r"))["config"]
+preloads = json.load(open(os.path.join("eval", "preloads", f"{run}_preloads.json"), "r"))["preloads"]
+
+## Instantiate model
+classification_model = Model(model_path="google-bert/bert-base-uncased", config=config, preloads=preloads)
+
+## Load cleaned test data
+test_data = pd.read_csv(os.path.join("eval", "data","test_data.csv"))[["Resume_str", "Label"]]
+
+
+
+
+
+## Inference on batch & save results to .csv
+df_predict, duration = batch.predict_df(classification_model, test_data, size=None)
+df_predict = batch.get_correct(df_predict)
+df_predict.to_csv(os.path.join("eval", "preloads", f"{run}_data.csv"))
+
+df_predict = pd.read_csv(os.path.join("eval", "preloads", run + "_data.csv"))
+
+## Evaluate & save results to .txt
+batch.evaluate(df_predict, run, duration)
