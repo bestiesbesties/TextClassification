@@ -1,0 +1,51 @@
+Evaluation of model 'at_2025-03-12_13-05'
+
+-- General evalutation --
+Duration: 3 minutes and 0 seconds
+Accuracy: 0.83
+
+-- General scores --
+   Metric  Macro  Micro  Weighted
+Precision   0.83   0.83      0.83
+   Recall   0.83   0.83      0.83
+       F1   0.82   0.83      0.82
+
+-- Confusion matrix --
+                        information technology  healthcare  construction
+information technology                      99          12             1
+healthcare                                  19          86             7
+construction                                10           9            93
+
+-- Source data--
+{
+    "information technology": {
+        "tp": 99,
+        "fp": 29,
+        "tn": 195,
+        "fn": 13,
+        "precision": 0.77,
+        "recall": 0.88,
+        "f1": 0.82,
+        "total": 141
+    },
+    "healthcare": {
+        "tp": 86,
+        "fp": 21,
+        "tn": 203,
+        "fn": 26,
+        "precision": 0.8,
+        "recall": 0.77,
+        "f1": 0.78,
+        "total": 133
+    },
+    "construction": {
+        "tp": 93,
+        "fp": 8,
+        "tn": 216,
+        "fn": 19,
+        "precision": 0.92,
+        "recall": 0.83,
+        "f1": 0.87,
+        "total": 120
+    }
+}

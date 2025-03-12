@@ -51,8 +51,20 @@ def remove_stopwords(doc:spacy.tokens.doc.Doc) -> str:
     Returns:
         str: Cleaned input from provided Doc.
     """
-    filtered_text = " ".join([token.text for token in doc if not token.is_stop])
-    return filtered_text.strip()
+    text = " ".join([token.text for token in doc if not token.is_stop])
+    return text.strip()
+
+def extract_lemmas(doc: spacy.tokens.doc.Doc):
+    """Extracts the source of the words in a Doc object as a string.
+
+    Args:
+        doc (spacy.tokens.doc.Doc): A spaCy Doc object containing tokenized text.
+
+    Returns:
+        str: A string of space-separated lemmatized words from the input document.
+    """
+    text = " ".join([token.lemma_ for token in doc])
+    return text.strip()
 
 def __burn_keywords(keywords:set) -> set:
     """Filters out a hardcoded list of English stopwords from a provided set.

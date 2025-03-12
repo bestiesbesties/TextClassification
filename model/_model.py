@@ -43,9 +43,11 @@ class Model:
         text_cleaned = chars.clean(text)
         ## .2 filter for stopwords
         text_filtered = words.remove_stopwords(words.make_doc(text_cleaned))
-        ## .3 create embeddings & keywords
+        ## .3 stemming
+        text_filtered_stemmed = words.extract_lemmas(words.make_doc(text_filtered))
+        ## .4 create embeddings & keywords
         doc_embedding = self.__get_embbeding(text_filtered)
-        doc_keywords = words.extract_keywords(words.make_doc(text_filtered))
+        doc_keywords = words.extract_keywords(words.make_doc(text_filtered_stemmed))
         return doc_embedding, doc_keywords
 
     def __classification(self, doc_embedding:np.array, doc_keywords:set) -> dict:
