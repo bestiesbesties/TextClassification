@@ -20,7 +20,7 @@ def cosine_similarity(v1:list, v2:list) -> float:
 
     return dot_product / (magnitude_v1 * magnitude_v2)
 
-def __get_all_embeddings(preloads:dict) -> np.array:
+def __get_all_embeddings(preloads:dict) -> np.ndarray:
     """Loads all preloaded embeddings for specific sector.
 
     Args:
@@ -36,7 +36,7 @@ def __get_all_embeddings(preloads:dict) -> np.array:
         all_emb.append(preloads["data"][sector]["embeddings"])
     return np.array(all_emb)
 
-def export_score(scores_dict:dict, faiss_scores:dict=None) -> str:
+def export_score(scores_dict:dict, faiss_scores:dict|None=None) -> str:
     """Creates dict with final scores by conditionally combining scores.
 
     Args:
