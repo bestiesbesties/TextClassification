@@ -14,10 +14,6 @@ file_path = namespace.file_path
 embedding_model_name = namespace.embedding_model_name
 embedding_model_path = config["model_mapping"][embedding_model_name]
 
-# pdf_file_path = os.path.join("eval","cvs","cv2.pdf")
-# embedding_model_name = "bert-base-uncased"
-# embedding_model_path = config["model_mapping"][embedding_model_name]
-
 classification_model = Model(
     model_path=embedding_model_path,
     config=config,
